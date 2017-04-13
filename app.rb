@@ -9,10 +9,8 @@ require 'pry'
 client = Mongo::Client.new(['127.0.0.1:27017'], :database => 'test')
 db = client.database
 
-sha256 = Digest::SHA256.new
-
 def auth_user(password)
-  binding.pry
+  sha256 = Digest::SHA256.new
   if sha256.digest(password) == ENV['HASH']
     return true
   else
