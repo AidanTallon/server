@@ -6,7 +6,7 @@ get '/' do
   'test'
 end
 
-post '/message/:body' do
+get '/message/:body' do
   mail = Mail.deliver do
     from ENV['EMAIL']
     to ENV['EMAIL']
