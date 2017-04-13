@@ -12,9 +12,9 @@ get '/' do
 end
 
 post '/test' do
-  db[:test].insert_one(name: params['stuff'])
+  db[:test].insert_one(name: params['stuff']).to_s
 end
 
 get '/test' do
-  db[:text].find(name: params['stuff']).first
+  db[:test].find(name: params['stuff']).first.to_s
 end
