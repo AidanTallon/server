@@ -11,10 +11,10 @@ get '/' do
   'test'
 end
 
-post '/test/:stuff' do
+post '/test' do
   db[:test].insert_one(name: params['stuff'])
 end
 
-get '/test/:id' do
+get '/test' do
   db[:text].find(name: params['stuff']).first
 end
