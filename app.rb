@@ -58,4 +58,4 @@ class App < Sinatra::Base
   end
 end
 
-App.run!
+App.run! bind: '0.0.0.0'
