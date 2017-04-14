@@ -16,6 +16,7 @@ class App < Sinatra::Base
   register do
     def auth(type)
       condition do
+        session[:redirect] = request.env["REQUEST_URI"]
         redirect '/login' unless send("is_#{type}?")
       end
     end
@@ -49,7 +50,7 @@ class App < Sinatra::Base
       redirect '/login'
     else
       session[:user_id] = User.authenticate(params).id
-      redirect back
+      redirect session[:redirect]
     end
   end
 
