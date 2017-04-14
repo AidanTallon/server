@@ -49,7 +49,7 @@ class App < Sinatra::Base
       redirect '/login'
     else
       session[:user_id] = User.authenticate(params).id
-      redirect '/'
+      redirect back
     end
   end
 
@@ -66,8 +66,12 @@ class App < Sinatra::Base
 
   get '/transaction', auth: :user do
     content_type :json
-    req = JSON.parse request.body.read
-    $mongo.find(:transactions, req).to_json
+    $mongo.find(:transactions, params).to_json
+  end
+
+  get '/log', auth: :user do
+    content_type :html
+    erb :log
   end
 end
 
