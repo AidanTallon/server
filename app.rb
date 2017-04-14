@@ -61,7 +61,7 @@ class App < Sinatra::Base
     $mongo.insert_one(:transactions, params)
   end
 
-  get '/transaction' auth: :user do
+  get '/transaction', auth: :user do
     content_type: json
     $mongo.find({}).to_json
   end
