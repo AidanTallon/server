@@ -56,6 +56,15 @@ class App < Sinatra::Base
   get '/logout' do
     session[:user_id] = nil
   end
+
+  post '/transaction' do
+    $mongo.insert_one(:transactions, params)
+  end
+
+  get '/transaction' auth: :user do
+    content_type: json
+    $mongo.find({}).to_json
+  end
 end
 
 App.run! bind: '0.0.0.0'
