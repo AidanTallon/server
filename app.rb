@@ -61,7 +61,7 @@ class App < Sinatra::Base
     content_type :json
     req = JSON.parse request.body.read
     $mongo.insert_one(:transactions, req)
-    response.body = $mongo.find({req}).first
+    response.body = $mongo.find(:transactions, req).first
     response
   end
 
