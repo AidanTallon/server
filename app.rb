@@ -59,11 +59,12 @@ class App < Sinatra::Base
 
   post '/transaction' do
     $mongo.insert_one(:transactions, params)
+    'success' # placeholder obv
   end
 
   get '/transaction', auth: :user do
     content_type :json
-    $mongo.find({}).to_json
+    $mongo.find(:transactions, {}).to_json
   end
 end
 
