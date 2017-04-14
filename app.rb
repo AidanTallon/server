@@ -7,6 +7,7 @@ require 'pry'
 client = Mongo::Client.new(['127.0.0.1:27017'], :database => 'test')
 db = client.database
 
+db_test = db[:test]
 db_transaction = db[:transaction]
 
 def auth_user(password)
@@ -21,12 +22,12 @@ post '/test' do
   if auth_user params['user']
     input = params
     input.delete('user')
-    db[:test].insert_one(name: params).to_s
+    db_test.insert_one(input).to_s
   end
 end
 
 get '/test' do
-  db[:test].find(params).first.to_s
+  db_test.find(params).first.to_s
 end
 
 post '/transaction' do
