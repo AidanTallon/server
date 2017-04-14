@@ -1,39 +1,61 @@
 require 'sinatra'
 require 'dotenv/load'
+require 'json'
 require 'mongo'
+
+require './lib/user.rb'
+require './lib/mongo.rb'
 
 require 'pry'
 
-client = Mongo::Client.new(['127.0.0.1:27017'], :database => 'test')
-db = client.database
+$mongo = MongoClient.new
 
-db_test = db[:test]
-db_transaction = db[:transaction]
+class App < Sinatra::Base
+  set sessions: true
 
-def auth_user(password)
-  password == ENV['PASSWORD']
-end
+  register do
+    def auth(type)
+      condition do
+        redirect '/login' unless send("is_#{type}?")
+      end
+    end
+  end
 
-get '/' do
-  'test'
-end
+  helpers do
+    def is_user?
+      @user != nil
+    end
 
-post '/test' do
-  if auth_user params['user']
-    input = params
-    input.delete('user')
-    db_test.insert_one(input).to_s
+    def is_admin?
+      @user != nil && @user.type == :admin
+    end
+  end
+
+  before do
+    @user = User.get(session[:user_id])
+  end
+
+  get '/', auth: :user do
+    "Hello, #{@user.name}."
+  end
+
+  get '/login' do
+    erb :login
+  end
+
+  post '/login' do
+    user = User.authenticate(params)
+    if user.nil?
+      redirect '/login'
+    else
+      session[:user_id] = User.authenticate(params).id
+      redirect '/'
+    end
+  end
+
+  get '/logout' do
+    session[:user_id] = nil
   end
 end
 
-get '/test' do
-  db_test.find(params).first.to_s
-end
-
-post '/transaction' do
-  if auth_user params['user']
-    input = params
-    input.delete('user')
-    db_transaction.insert_one(params)
-  end
-end
+App.run!
