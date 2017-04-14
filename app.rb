@@ -62,7 +62,7 @@ class App < Sinatra::Base
   end
 
   get '/transaction', auth: :user do
-    content_type: json
+    content_type :json
     $mongo.find({}).to_json
   end
 end
