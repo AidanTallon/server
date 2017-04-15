@@ -62,13 +62,13 @@ class App < Sinatra::Base
   post '/transaction' do
     content_type :json
     req = JSON.parse request.body.read
-    $mongo.insert_one(:transactions, req)
-    $mongo.find(:transactions, req).first.to_json
+    mongo.insert_one(:transactions, req)
+    mongo.find(:transactions, req).first.to_json
   end
 
   get '/transaction', auth: :user do
     content_type :json
-    $mongo.find(:transactions, params).to_json
+    mongo.find(:transactions, params).to_json
   end
 
   get '/log', auth: :user do
