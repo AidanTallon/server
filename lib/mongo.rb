@@ -1,12 +1,10 @@
 require 'mongo'
 
 class MongoClient
-  @@client = Mongo::Client.new(['127.0.0.1:27017'], database: 'test')
-  @@db = @@client.database
-
-  @@test_db = @@db[:test]
-  @@transactions_db = @@db[:transactions]
-  @@users_db = @@db[:users]
+  def initialize(address, db)
+    @@client = Mongo::Client.new([address], database: db)
+    @@db = @@client.database
+  end
 
   def insert_one(col, params)
     @@db[col].insert_one(params)

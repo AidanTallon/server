@@ -1,0 +1,31 @@
+# Access to the data in this file is provided through the EnvConfig class - see lib/env_config.rb
+
+defaults: &execution_defaults
+  default_config: local # Ensures the local profile is loaded if no CONFIG= passed from command line
+
+local:
+  <<: *execution_defaults
+  app_options:
+    bind: 'localhost'
+    port: '4567'
+  mongo:
+    address: '127.0.0.1:27017'
+    db: 'test'
+
+test:
+  <<: *execution_defaults
+  app_options:
+    bind: '0.0.0.0'
+    port: '4567'
+  mongo:
+    address: '127.0.0.1:27017'
+    db: 'test'
+
+production:
+  <<: *execution_defaults
+  app_options:
+    bind: '0.0.0.0'
+    port: '4567'
+  mongo:
+    address: '127.0.0.1:27017'
+    db: 'live'

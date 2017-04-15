@@ -1,14 +1,15 @@
 require 'sinatra'
-require 'dotenv/load'
 require 'json'
 require 'mongo'
 
 require './lib/user.rb'
 require './lib/mongo.rb'
+require './lib/env_config.rb'
 
 require 'pry'
 
-$mongo = MongoClient.new
+mongo = MongoClient.new EnvConfig.mongo['address'], EnvConfig.mongo['db']
+User.db = mongo
 
 class App < Sinatra::Base
   set sessions: true
@@ -76,4 +77,4 @@ class App < Sinatra::Base
   end
 end
 
-App.run! bind: '0.0.0.0'
+App.run! EnvConfig.app_options
