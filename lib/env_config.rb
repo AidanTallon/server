@@ -20,11 +20,18 @@ class EnvConfig
     raise "No config.yml found" unless File.exist? config_yaml
     config_file = YAML.load(File.open(config_yaml))
 
-    # Get config setting from environment. Should be passed in like CONFIG=local from command line (see rakefile)
+    opts = Hash.new
+    ARGV.each do |opt|
+      kv = opt.split('=')
+      opts[kv[0]] = kv[1]
+    end
+
+    # Get config setting from environment. Should be passed in like CONFIG=local from command line
     # Defaults to local if nothing passed in
-    @environment = ENV['CONFIG']
+    @environment = opts['CONFIG']
 
     if @environment.nil?
+      puts "Using default config..."
       @environment = config_file.fetch('defaults').fetch('default_config')
       abort "Exiting: No CONFIG supplied from command line, and no default_config found in config.yml" if @environment.nil?
     end
