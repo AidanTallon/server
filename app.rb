@@ -8,8 +8,8 @@ require './lib/env_config.rb'
 
 require 'pry'
 
-mongo = MongoClient.new EnvConfig.mongo['address'], EnvConfig.mongo['db']
-User.db = mongo
+$mongo = MongoClient.new EnvConfig.mongo['address'], EnvConfig.mongo['db']
+User.db = $mongo
 
 class App < Sinatra::Base
   set sessions: true
@@ -62,13 +62,13 @@ class App < Sinatra::Base
   post '/transaction' do
     content_type :json
     req = JSON.parse request.body.read
-    mongo.insert_one(:transactions, req)
-    mongo.find(:transactions, req).first.to_json
+    $mongo.insert_one(:transactions, req)
+    $mongo.find(:transactions, req).first.to_json
   end
 
   get '/transaction', auth: :user do
     content_type :json
-    mongo.find(:transactions, params).to_json
+    $mongo.find(:transactions, params).to_json
   end
 
   get '/log', auth: :user do
