@@ -1,1 +1,8 @@
-<p>placeholder</p>
+<h1>Transactions</h1>
+<% transactions.all.each do |transaction| %>
+<%= transaction.to_s %>
+<% end %>
+
+<form name="update" action="/update" method="get">
+  <input type="submit" value="Update transactions" />
+</form>

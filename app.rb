@@ -2,14 +2,15 @@ require 'sinatra'
 require 'json'
 require 'mongo'
 
-require './lib/user.rb'
-require './lib/mongo.rb'
-require './lib/env_config.rb'
+Dir[File.join(Dir.pwd, 'lib/*.rb')].each { |f| require f }
 
 require 'pry'
 
 $mongo = MongoClient.new EnvConfig.mongo['address'], EnvConfig.mongo['db']
 User.db = $mongo
+Transaction.db = $mongo
+Transaction.monzo = MonzoClient
+Transaction.account_id = EnvConfig.monzo['account_id']
 
 class App < Sinatra::Base
   set sessions: true
@@ -73,7 +74,15 @@ class App < Sinatra::Base
 
   get '/log', auth: :user do
     content_type :html
-    erb :log
+    erb :log, locals:
+    {
+      transactions: Transaction
+    }
+  end
+
+  get '/update', auth: :user do
+    Transaction.update
+    redirect back
   end
 end
 

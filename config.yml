@@ -6,26 +6,32 @@ defaults: &execution_defaults
 local:
   <<: *execution_defaults
   app_options:
-    bind: 'localhost'
-    port: '4567'
+    bind: localhost
+    port: 4567
   mongo:
-    address: '127.0.0.1:27017'
-    db: 'test'
+    address: 127.0.0.1:27017
+    db: test
+  monzo:
+    account_id: acc_00009JAJ9PNJZ9xVtePmoD
 
 test:
   <<: *execution_defaults
   app_options:
-    bind: '0.0.0.0'
-    port: '4567'
+    bind: 0.0.0.0
+    port: 4567
   mongo:
-    address: '127.0.0.1:27017'
-    db: 'test'
+    address: 127.0.0.1:27017
+    db: test
+  monzo:
+    account_id: acc_00009JAJ9PNJZ9xVtePmoD
 
 production:
   <<: *execution_defaults
   app_options:
-    bind: '0.0.0.0'
-    port: '4567'
+    bind: 0.0.0.0
+    port: 4567
   mongo:
-    address: '127.0.0.1:27017'
-    db: 'live'
+    address: 127.0.0.1:27017
+    db: live
+  monzo:
+    account_id: acc_00009JAJ9PNJZ9xVtePmoD
