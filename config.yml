@@ -11,8 +11,6 @@ local:
   mongo:
     address: 127.0.0.1:27017
     db: test
-  monzo:
-    account_id: acc_00009JAJ9PNJZ9xVtePmoD
 
 test:
   <<: *execution_defaults
@@ -22,8 +20,6 @@ test:
   mongo:
     address: 127.0.0.1:27017
     db: test
-  monzo:
-    account_id: acc_00009JAJ9PNJZ9xVtePmoD
 
 production:
   <<: *execution_defaults
@@ -33,5 +29,3 @@ production:
   mongo:
     address: 127.0.0.1:27017
     db: live
-  monzo:
-    account_id: acc_00009JAJ9PNJZ9xVtePmoD

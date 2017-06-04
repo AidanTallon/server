@@ -1,7 +1,7 @@
 require 'digest'
 
 class User
-  attr_reader :id, :name, :type
+  attr_reader :id, :name, :type, :client_id, :account_id
 
   def self.db=(value)
     @@db = value
@@ -14,7 +14,7 @@ class User
     if data.nil?
       return nil
     else
-      return User.new data['user_id'], data['username'], data['user_type']
+      return User.new data
     end
   end
 
@@ -30,9 +30,11 @@ class User
     end
   end
 
-  def initialize(user_id, username, user_type)
-    @id = user_id
-    @name = username
-    @type = user_type.to_sym
+  def initialize(data)
+    @id = data['user_id']
+    @name = data['username']
+    @type = data['user_type'].to_sym
+    @client_id = data['client_id']
+    @account_id = data['account_id']
   end
 end

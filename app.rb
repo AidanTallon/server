@@ -3,14 +3,13 @@ require 'json'
 require 'mongo'
 
 Dir[File.join(Dir.pwd, 'lib/*.rb')].each { |f| require f }
+Dir[File.join(Dir.pwd, 'lib/helpers/*.rb')].each { |f| require f }
 
 require 'pry'
 
 $mongo = MongoClient.new EnvConfig.mongo['address'], EnvConfig.mongo['db']
 User.db = $mongo
 Transaction.db = $mongo
-Transaction.monzo = MonzoClient
-Transaction.account_id = EnvConfig.monzo['account_id']
 
 class App < Sinatra::Base
   set sessions: true
@@ -36,6 +35,10 @@ class App < Sinatra::Base
 
   before do
     @user = User.get(session[:user_id])
+    unless @user.nil?
+      Transaction.monzo = MonzoClient.new @user.client_id, @user.account_id
+      Transaction.account_id = @user.account_id
+    end
   end
 
   get '/', auth: :user do
@@ -81,7 +84,9 @@ class App < Sinatra::Base
   end
 
   get '/update', auth: :user do
-    Transaction.update
+    if Transaction.update.nil?
+      raise 'todo - redirect and stuff'
+    end
     redirect back
   end
 end

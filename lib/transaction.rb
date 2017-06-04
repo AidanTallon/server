@@ -22,7 +22,8 @@ class Transaction
   end
 
   def self.update
-    data = @@monzo.get "/transactions?expand[]=merchant&account_id=#{@@account_id}"
+    data = @@monzo.get_transactions
+    return nil if data.code == 401
     data.each do |t|
       unless self.ids.include? data['id']
         Transaction.new t
